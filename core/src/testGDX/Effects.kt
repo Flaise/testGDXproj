@@ -3,22 +3,22 @@ package testGDX
 import java.util.Collections
 
 
-abstract class EffectHandler<GEffect>(val type: Class<GEffect>, val priorityDescending: Int):
-        Comparable<EffectHandler<GEffect>> {
+abstract public class EffectHandler<TEffect>(val type: Class<TEffect>, val priorityDescending: Int):
+        Comparable<EffectHandler<TEffect>> {
 
-    override public fun compareTo(other: EffectHandler<GEffect>): Int {
+    override public fun compareTo(other: EffectHandler<TEffect>): Int {
         return other.priorityDescending - priorityDescending
     }
 
     /**
      * @return true to skip all further processing for the current effect, false otherwise
      */
-    abstract fun handle(effect: GEffect): Boolean
+    abstract fun handle(effect: TEffect): Boolean
 }
 
 val handlers = hashMapOf<Class<*>, MutableList<EffectHandler<*>>>()
 
-fun addHandler(handler: EffectHandler<*>) {
+fun add(handler: EffectHandler<*>) {
     val typeHandlers = handlers[handler.type]
     if(typeHandlers == null) {
         handlers[handler.type] = arrayListOf(handler)
@@ -29,20 +29,21 @@ fun addHandler(handler: EffectHandler<*>) {
     }
 }
 
-fun removeHandler(handler: EffectHandler<*>) {
+fun remove(handler: EffectHandler<*>) {
     val typeHandlers = handlers[handler.type]
     if(typeHandlers == null)
         return
     typeHandlers.remove(handler)
 }
 
-fun apply<GEffect>(effect: GEffect) {
+fun apply<TEffect>(effect: TEffect) {
     val contextHandlers1 = handlers[effect.javaClass]
     if(contextHandlers1 == null)
         return
-    val contextHandlers = contextHandlers1 as MutableList<EffectHandler<GEffect>>
+    val contextHandlers = contextHandlers1 as MutableList<EffectHandler<TEffect>>
     for(handler in contextHandlers)
         if(handler.handle(effect))
             return
 }
+
 

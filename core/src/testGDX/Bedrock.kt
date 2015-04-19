@@ -2,7 +2,7 @@ package testGDX
 
 
 object GentlePushHandler: EffectHandler<GentlePushEffect>(javaClass<GentlePushEffect>(), 0) {
-    override fun handle(effect: GentlePushEffect) = false
+    override fun invoke(effect: GentlePushEffect) = false
 }
 
 

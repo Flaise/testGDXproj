@@ -4,6 +4,7 @@ import org.junit.Test
 import kotlin.test.*
 import org.junit.After
 import org.junit.Before
+import java.util.NoSuchElementException
 
 
 object Left: Key<Int> {}
@@ -55,7 +56,19 @@ public class ContextTest {
         assertEquals(context[NullableThing], one)
     }
 
-    Test(expected = javaClass<IllegalStateException>()) fun missingInt() {
+    Test(expected = javaClass<NoSuchElementException>()) fun missingInt() {
         context[Left]
+    }
+
+    Test fun existenceOfInt() {
+        assert(Left !in context)
+        context[Left] = 1
+        assert(Left in context)
+    }
+
+    Test fun existenceOfNullable() {
+        assert(NullableThing !in context)
+        context[NullableThing] = null
+        assert(NullableThing in context)
     }
 }

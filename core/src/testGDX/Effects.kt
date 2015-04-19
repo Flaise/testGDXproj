@@ -3,7 +3,8 @@ package testGDX
 import java.util.Collections
 
 
-abstract public class EffectHandler<TEffect>(val type: Class<TEffect>, val priorityDescending: Int):
+data abstract public
+class EffectHandler<TEffect>(val type: Class<TEffect>, val priorityDescending: Int):
         Comparable<EffectHandler<TEffect>> {
 
     override public fun compareTo(other: EffectHandler<TEffect>): Int {
@@ -13,12 +14,23 @@ abstract public class EffectHandler<TEffect>(val type: Class<TEffect>, val prior
     /**
      * @return true to skip all further processing for the current effect, false otherwise
      */
-    abstract fun handle(effect: TEffect): Boolean
+    abstract fun invoke(effect: TEffect): Boolean
 }
 
-val handlers = hashMapOf<Class<*>, MutableList<EffectHandler<*>>>()
 
-fun add(handler: EffectHandler<*>) {
+object KEffects: Key<MutableMap<Class<*>, MutableList<EffectHandler<*>>>> {}
+
+
+fun handlersOf(context: Context): MutableMap<Class<*>, MutableList<EffectHandler<*>>> {
+    if(KEffects in context)
+        return context[KEffects]
+    val result = hashMapOf<Class<*>, MutableList<EffectHandler<*>>>()
+    context[KEffects] = result
+    return result
+}
+
+fun addHandler(context: Context, handler: EffectHandler<*>) {
+    val handlers = handlersOf(context)
     val typeHandlers = handlers[handler.type]
     if(typeHandlers == null) {
         handlers[handler.type] = arrayListOf(handler)
@@ -29,20 +41,22 @@ fun add(handler: EffectHandler<*>) {
     }
 }
 
-fun remove(handler: EffectHandler<*>) {
+fun removeHandler(context: Context, handler: EffectHandler<*>) {
+    val handlers = handlersOf(context)
     val typeHandlers = handlers[handler.type]
     if(typeHandlers == null)
         return
     typeHandlers.remove(handler)
 }
 
-fun apply<TEffect>(effect: TEffect) {
+fun apply<TEffect>(context: Context, effect: TEffect) {
+    val handlers = handlersOf(context)
     val contextHandlers1 = handlers[effect.javaClass]
     if(contextHandlers1 == null)
         return
     val contextHandlers = contextHandlers1 as MutableList<EffectHandler<TEffect>>
     for(handler in contextHandlers)
-        if(handler.handle(effect))
+        if(handler(effect))
             return
 }
 

@@ -7,28 +7,23 @@ import org.junit.Before
 
 
 public class BedrockTest {
+    var context = Context()
 
     Before fun setUp() {
+        context = Context()
     }
 
     After fun tearDown() {
     }
 
-    Test fun asdf() {
+    Test fun handleGentlePush() {
+        makeBedrock(context, Vec2iv(10, 5))
 
-        val context = Any()
-
-//        Bedrock.make(Vec2iv(10, 5))
-
-//        assert(Bedrock.)
         val effect = GentlePushEffect(Vec2iv(10, 6), Vec2iv(10, 5))
         assert(!effect.obstructed)
 
-//        Effects.apply(context, effect)
-//        Effects.apply(effect)
-
+        applyEffect(context, effect)
         assert(effect.obstructed)
-
     }
 
 }

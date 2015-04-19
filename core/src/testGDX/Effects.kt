@@ -11,10 +11,7 @@ class EffectHandler<TEffect>(val type: Class<TEffect>, val priorityDescending: I
         return other.priorityDescending - priorityDescending
     }
 
-    /**
-     * @return true to skip all further processing for the current effect, false otherwise
-     */
-    abstract fun invoke(effect: TEffect): Boolean
+    abstract fun invoke(context: Context, effect: TEffect)
 }
 
 
@@ -29,7 +26,7 @@ fun handlersOf(context: Context): MutableMap<Class<*>, MutableList<EffectHandler
     return result
 }
 
-fun addHandler(context: Context, handler: EffectHandler<*>) {
+fun addEffectHandler(context: Context, handler: EffectHandler<*>) {
     val handlers = handlersOf(context)
     val typeHandlers = handlers[handler.type]
     if(typeHandlers == null) {
@@ -41,7 +38,7 @@ fun addHandler(context: Context, handler: EffectHandler<*>) {
     }
 }
 
-fun removeHandler(context: Context, handler: EffectHandler<*>) {
+fun removeEffectHandler(context: Context, handler: EffectHandler<*>) {
     val handlers = handlersOf(context)
     val typeHandlers = handlers[handler.type]
     if(typeHandlers == null)
@@ -49,15 +46,14 @@ fun removeHandler(context: Context, handler: EffectHandler<*>) {
     typeHandlers.remove(handler)
 }
 
-fun apply<TEffect>(context: Context, effect: TEffect) {
+fun applyEffect<TEffect>(context: Context, effect: TEffect) {
     val handlers = handlersOf(context)
     val contextHandlers1 = handlers[effect.javaClass]
     if(contextHandlers1 == null)
         return
     val contextHandlers = contextHandlers1 as MutableList<EffectHandler<TEffect>>
     for(handler in contextHandlers)
-        if(handler(effect))
-            return
+        handler(context, effect)
 }
 
 

@@ -19,6 +19,6 @@ public class EffectsTest {
     }
 
     Test fun applyEmpty() {
-        apply(Context(), MockEffect(2))
+        applyEffect(Context(), MockEffect(2))
     }
 }

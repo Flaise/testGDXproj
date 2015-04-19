@@ -2,44 +2,31 @@ package testGDX
 
 
 object GentlePushHandler: EffectHandler<GentlePushEffect>(javaClass<GentlePushEffect>(), 0) {
-    override fun invoke(effect: GentlePushEffect) = false
+    override fun invoke(context: Context, effect: GentlePushEffect) {
+        val elevation = bedrockElevation(context, effect.destination.x)
+        if(elevation != null && elevation <= effect.destination.y)
+            effect.obstructed = true
+    }
 }
 
+object KBedrock: Key<MutableMap<Int, Int>> {}
 
-fun make(position: Vec2iv) {
-
+fun elevationsOf(context: Context): MutableMap<Int, Int> {
+    if(KBedrock in context)
+        return context[KBedrock]
+    val result = hashMapOf<Int, Int>()
+    context[KBedrock] = result
+    addEffectHandler(context, GentlePushHandler)
+    return result
 }
 
-//EffectHandler<GEffect>(val type: Class<GEffect>, val priorityDescending: Int):
-//
-//[<JavaScript>]
-//module Bedrock =
-//let Key = 5
-//
-//let GetSurfaces (state:State) =
-//GetMap Key state
-//
-//let Present position state =
-//match GetSurfaces(state).TryFind position.X with
-//| None -> false
-//| Some y -> y <= position.Y
-//
-//let private handleGentlePush (effect:GentlePushEffect) (state:State) =
-//if Present effect.Destination state then
-//{effect with Obstructed=true}, state
-//else
-//effect, state
-//
-//let SetSurfaces (positions:Map<int, int>) (state:State) =
-//SetState
-//Key
-//positions
-//(Effects.Register GentlePushEffect.TypeID handleGentlePush 1)
-//(Effects.Unregister<GentlePushEffect> GentlePushEffect.TypeID 1)
-//state
-//
-//let Make (position:Vector2i) (state:State) =
-//SetSurfaces (GetSurfaces(state).Add(position.X, position.Y)) state
-//
-//let GetElevation x state =
-//GetSurfaces(state).TryFind x
+fun makeBedrock(context: Context, position: Vec2iv) {
+    val elevations = elevationsOf(context)
+
+    val prevElevation = elevations[position.x]
+    if(prevElevation == null || prevElevation >= position.y)
+        elevations[position.x] = position.y
+}
+
+// Adds key type-checking to Map#get()
+fun bedrockElevation(context: Context, x: Int): Int? = elevationsOf(context)[x]

@@ -10,8 +10,10 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport
 
 public class Main: ApplicationAdapter() {
     var shapes: ShapeRenderer? = null
-    var camera = OrthographicCamera()
-    var viewport = ExtendViewport(8f, 8f, 10f, 10f, camera)
+    val camera = OrthographicCamera()
+    val viewport = ExtendViewport(8f, 8f, 10f, 10f, camera)
+    val context = Context()
+    var drawEffect: DrawEffect? = null
 
     override fun create() {
         camera.viewportWidth = 8f
@@ -21,6 +23,10 @@ public class Main: ApplicationAdapter() {
         viewport.apply()
 
         shapes = ShapeRenderer()
+        drawEffect = DrawEffect(shapes!!)
+
+        makeBedrock(context, Vec2iv(1, 2))
+        makeBedrock(context, Vec2iv(3, 3))
     }
 
     override fun render() {
@@ -33,12 +39,7 @@ public class Main: ApplicationAdapter() {
         Gdx.gl.glClearColor(1f, 1f, 1f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        shapes.begin(ShapeRenderer.ShapeType.Filled)
-        for(i in 0f..9f) {
-            shapes.setColor(.3f, .3f, .3f, 1f)
-            shapes.rect(i, i, 1f, 1f)
-        }
-        shapes.end()
+        applyEffect(context, drawEffect)
     }
 
     override fun resize(width: Int, height: Int) {

@@ -4,11 +4,11 @@ import java.util.Collections
 
 
 data abstract public
-class EffectHandler<TEffect>(val type: Class<TEffect>, val priorityDescending: Int):
+class EffectHandler<TEffect>(val type: Class<TEffect>, val order: Int):
         Comparable<EffectHandler<TEffect>> {
 
     override public fun compareTo(other: EffectHandler<TEffect>): Int {
-        return other.priorityDescending - priorityDescending
+        return order - other.order
     }
 
     abstract fun invoke(context: Context, effect: TEffect)

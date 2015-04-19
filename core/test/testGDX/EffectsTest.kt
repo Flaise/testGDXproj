@@ -9,7 +9,7 @@ import org.junit.Before
 class MockEffect(var value: Int) {}
 
 class MockHandlerFirst(val expectedInput: Int):
-        EffectHandler<MockEffect>(javaClass<MockEffect>(), -1) {
+        EffectHandler<MockEffect>(javaClass<MockEffect>(), 1) {
     override public fun invoke(context: Context, effect: MockEffect) {
         assertEquals(effect.value, expectedInput)
         effect.value += 1
@@ -17,7 +17,7 @@ class MockHandlerFirst(val expectedInput: Int):
 }
 
 class MockHandlerSecond(val expectedInput: Int):
-        EffectHandler<MockEffect>(javaClass<MockEffect>(), -2) {
+        EffectHandler<MockEffect>(javaClass<MockEffect>(), 2) {
     override public fun invoke(context: Context, effect: MockEffect) {
         assertEquals(effect.value, expectedInput)
         effect.value += 2

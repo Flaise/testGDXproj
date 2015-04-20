@@ -21,7 +21,7 @@ object DrawBedrockHandler: EffectHandler<DrawEffect>(javaClass<DrawEffect>(), 0)
         shapes.begin(ShapeRenderer.ShapeType.Filled)
         shapes.setColor(.3f, .3f, .3f, 1f)
         for((x, y) in elevationsOf(context)) {
-            shapes.rect(x.toFloat(), y.toFloat() + 1f, 1f, worldBottom - y.toFloat() - 1f)
+            shapes.rect(x.toFloat(), y.toFloat(), 1f, worldBottom - y.toFloat())
         }
         shapes.end()
     }

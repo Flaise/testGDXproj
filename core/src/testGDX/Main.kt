@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.ExtendViewport
+import java.util.Timer
+import java.util.TimerTask
 
 public class Main: ApplicationAdapter() {
     var shapes: ShapeRenderer? = null
@@ -31,6 +33,21 @@ public class Main: ApplicationAdapter() {
         makeBedrock(context, Vec2iv(-3, -3))
         makeBedrock(context, Vec2iv(-4, -4))
         makeBedrock(context, Vec2iv(4, 4))
+
+        makeWater(context, Vec2iv(-1, 2))
+
+        delayTick()
+    }
+
+    fun delayTick() {
+        Timer().schedule(object: TimerTask() {
+            override fun run() {
+                delayTick()
+                Gdx.app.postRunnable {
+                    applyEffect(context, TickEffect)
+                }
+            }
+        }, 100)
     }
 
     override fun render() {

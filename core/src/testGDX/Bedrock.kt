@@ -14,10 +14,14 @@ object GentlePushHandler: EffectHandler<GentlePushEffect>(javaClass<GentlePushEf
 object DrawBedrockHandler: EffectHandler<DrawEffect>(javaClass<DrawEffect>(), 0) {
     override fun invoke(context: Context, effect: DrawEffect) {
         val shapes = effect.shapes
+
+        val camera = effect.viewport.getCamera()
+        val worldBottom = -camera.viewportHeight / 2
+
         shapes.begin(ShapeRenderer.ShapeType.Filled)
         shapes.setColor(.3f, .3f, .3f, 1f)
         for((x, y) in elevationsOf(context)) {
-            shapes.rect(x.toFloat(), y.toFloat(), 1f, 1f)
+            shapes.rect(x.toFloat(), y.toFloat() + 1f, 1f, worldBottom - y.toFloat() - 1f)
         }
         shapes.end()
     }

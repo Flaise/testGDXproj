@@ -46,8 +46,7 @@ fun removeEffectHandler(context: Context, handler: EffectHandler<*>) {
     typeHandlers.remove(handler)
 }
 
-// TODO: no generic constraint for non-nullability?
-fun applyEffect<TEffect>(context: Context, effect: TEffect) {
+fun applyEffect<TEffect: Any>(context: Context, effect: TEffect) {
     val handlers = handlersOf(context)
     val contextHandlers1 = handlers[effect.javaClass]
     if(contextHandlers1 == null)

@@ -23,14 +23,19 @@ public class Main: ApplicationAdapter() {
         viewport.apply()
 
         shapes = ShapeRenderer()
-        drawEffect = DrawEffect(shapes!!)
+        drawEffect = DrawEffect(shapes!!, viewport)
 
         makeBedrock(context, Vec2iv(1, 2))
         makeBedrock(context, Vec2iv(3, 3))
+        makeBedrock(context, Vec2iv(-2, -1))
+        makeBedrock(context, Vec2iv(-3, -3))
+        makeBedrock(context, Vec2iv(-4, -4))
+        makeBedrock(context, Vec2iv(4, 4))
     }
 
     override fun render() {
         val shapes = this.shapes!!
+        val drawEffect = this.drawEffect!!
 
         val camera = viewport.getCamera()
         shapes.setProjectionMatrix(camera.projection)

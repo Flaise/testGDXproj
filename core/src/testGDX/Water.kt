@@ -10,7 +10,7 @@ object DrawWaterHandler: EffectHandler<DrawEffect>(javaClass<DrawEffect>(), 1) {
         shapes.begin(ShapeRenderer.ShapeType.Filled)
         shapes.setColor(0f, .3f, .8f, 1f)
         for((x, y) in positionsOf(context)) {
-            shapes.rect(x.toFloat(), y.toFloat() + 1f, 1f, 1f)
+            shapes.rect(x.toFloat(), y.toFloat(), 1f, 1f)
         }
         shapes.end()
     }
@@ -20,14 +20,19 @@ object TickWaterHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 0) {
     override fun invoke(context: Context, effect: TickEffect) {
         val positions = positionsOf(context)
 
-        for(i in positions.indices) {
+        var i = 0
+        while(i < positions.size()) {
             val position = positions[i]
 
             val push = GentlePushEffect(position, position + DOWNV)
             applyEffect(context, push)
-            //if(push.obstructed) // TODO
+            if(push.obstructed) {
+                positions.remove(i)
+                continue
+            }
 
             positions[i] = position + DOWNV
+            i += 1
         }
     }
 }

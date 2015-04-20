@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 object GentlePushHandler: EffectHandler<GentlePushEffect>(javaClass<GentlePushEffect>(), 0) {
     override fun invoke(context: Context, effect: GentlePushEffect) {
         val elevation = bedrockElevation(context, effect.destination.x)
-        if(elevation != null && elevation <= effect.destination.y)
+        if(elevation != null && elevation >= effect.destination.y)
             effect.obstructed = true
     }
 }
@@ -21,7 +21,7 @@ object DrawBedrockHandler: EffectHandler<DrawEffect>(javaClass<DrawEffect>(), 0)
         shapes.begin(ShapeRenderer.ShapeType.Filled)
         shapes.setColor(.3f, .3f, .3f, 1f)
         for((x, y) in elevationsOf(context)) {
-            shapes.rect(x.toFloat(), y.toFloat(), 1f, worldBottom - y.toFloat())
+            shapes.rect(x.toFloat(), y.toFloat() + 1f, 1f, worldBottom - y.toFloat())
         }
         shapes.end()
     }

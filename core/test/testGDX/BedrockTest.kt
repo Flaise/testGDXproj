@@ -16,7 +16,7 @@ public class BedrockTest {
     After fun tearDown() {
     }
 
-    Test fun handleGentlePush() {
+    Test fun obstruction() {
         makeBedrock(context, Vec2iv(10, 5))
 
         val effect = GentlePushEffect(Vec2iv(10, 6), Vec2iv(10, 5))
@@ -24,6 +24,16 @@ public class BedrockTest {
 
         applyEffect(context, effect)
         assert(effect.obstructed)
+    }
+
+    Test fun noObstruction() {
+        makeBedrock(context, Vec2iv(10, 5))
+
+        val effect = GentlePushEffect(Vec2iv(10, 7), Vec2iv(10, 6))
+        assert(!effect.obstructed)
+
+        applyEffect(context, effect)
+        assert(!effect.obstructed)
     }
 
 }

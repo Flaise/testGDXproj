@@ -35,11 +35,12 @@ fun addEffectHandler(context: Context, handler: EffectHandler<*>) {
         newHandlers.add(handler)
         handlers[handler.type] = newHandlers
     }
-    else if(typeHandlers.any { a -> a.order == handler.order }) {
+    else if(typeHandlers.any { it.order == handler.order }) {
         if(handler in typeHandlers)
             throw IllegalStateException("Handler already added.")
-        // TODO: say which handler is already added
-        throw IllegalStateException("Handler of given class and priority already added.")
+        val existing = typeHandlers.first { it.order == handler.order }
+        throw IllegalStateException("Handler of given class and priority already added: "
+                                    + existing.javaClass.getSimpleName())
     }
     else {
         typeHandlers.add(handler)

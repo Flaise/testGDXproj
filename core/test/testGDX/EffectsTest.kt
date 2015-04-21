@@ -95,7 +95,8 @@ public class EffectsTest {
             addEffectHandler(context, MockHandlerAlsoFirst())
         }
         catch(err: IllegalStateException) {
-            assertEquals(err.getMessage(), "Handler of given class and priority already added.")
+            assertEquals(err.getMessage(),
+                         "Handler of given class and priority already added: MockHandlerFirst")
         }
     }
 

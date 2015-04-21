@@ -17,6 +17,7 @@ public class Main: ApplicationAdapter() {
     val context = Context()
     val random = RandomXS128()
     val tickEffect = TickEffect(random)
+    val timer = Timer()
 
     var shapes: ShapeRenderer? = null
     var drawEffect: DrawEffect? = null
@@ -42,7 +43,7 @@ public class Main: ApplicationAdapter() {
     }
 
     fun delayTick() {
-        Timer().schedule(object: TimerTask() {
+        timer.schedule(object: TimerTask() {
             override fun run() {
                 delayTick()
                 Gdx.app.postRunnable {
@@ -69,5 +70,9 @@ public class Main: ApplicationAdapter() {
 
     override fun resize(width: Int, height: Int) {
         viewport.update(width, height)
+    }
+
+    override fun dispose() {
+        timer.cancel()
     }
 }

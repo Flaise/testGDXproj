@@ -1,20 +1,26 @@
 package testGDX
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import java.util.NoSuchElementException
 
 
 object PushSettledDirtHandler: EffectHandler<PushEffect>(javaClass<PushEffect>(), 1) {
     override fun invoke(context: Context, effect: PushEffect) {
         val positions = settledDirtPositionsOf(context)
-        if(effect.destination in positions)
-            effect.obstructed = true
+        if(effect.destination !in positions)
+            return
+        effect.obstructed = true
+        if(effect.destination + DOWNV in positions)
+            return
+        unsettle(context, effect.destination)
     }
 }
 
 object DirtMovedSettledDirtHandler: EffectHandler<DirtMovedEffect>(javaClass<DirtMovedEffect>(), 0) {
     override fun invoke(context: Context, effect: DirtMovedEffect) {
         val positions = settledDirtPositionsOf(context)
-        if(effect.position + LEFTV in positions || effect.position + RIGHTV in positions)
+        if(effect.position + LEFTV in positions || effect.position + RIGHTV in positions
+                || effect.position + DOWNV in positions)
             effect.stuck = true
     }
 }
@@ -48,4 +54,12 @@ fun settledDirtPositionsOf(context: Context): MutableSet<Vec2iv> {
 fun makeSettledDirt(context: Context, position: Vec2iv) {
     val positions = settledDirtPositionsOf(context)
     positions.add(position)
+}
+
+fun unsettle(context: Context, position: Vec2iv) {
+    val positions = settledDirtPositionsOf(context)
+    if(position !in positions)
+        throw NoSuchElementException()
+    positions.remove(position)
+    makeDirt(context, position)
 }

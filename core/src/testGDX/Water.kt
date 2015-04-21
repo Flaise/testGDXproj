@@ -31,7 +31,7 @@ object TickWaterHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 0) {
                 continue
             }
 
-            positions[i] = position + DOWNV
+            positions[i] = position + DOWNV // TODO: arithmetic in place
             i += 1
         }
     }

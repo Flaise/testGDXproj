@@ -24,6 +24,15 @@ class MockHandlerSecond(val expectedInput: Int):
     }
 }
 
+class MockHandlerAddsFirst(val expectedInput: Int):
+        EffectHandler<MockEffect>(javaClass<MockEffect>(), 3) {
+    override public fun invoke(context: Context, effect: MockEffect) {
+        assertEquals(effect.value, expectedInput)
+        effect.value += 4
+        addEffectHandler(context, MockHandlerFirst(-999999999))
+    }
+}
+
 
 public class EffectsTest {
     var context = Context()
@@ -61,5 +70,16 @@ public class EffectsTest {
         removeEffectHandler(context, handler)
         applyEffect(context, effect)
         assertEquals(effect.value, 0)
+    }
+
+    Test(expected = javaClass<IllegalStateException>()) fun addTwice() {
+        addEffectHandler(context, MockHandlerFirst(0))
+        addEffectHandler(context, MockHandlerFirst(0))
+    }
+
+    Test fun concurrentModification() {
+        addEffectHandler(context, MockHandlerAddsFirst(0))
+        applyEffect(context, effect)
+        assertEquals(effect.value, 4)
     }
 }

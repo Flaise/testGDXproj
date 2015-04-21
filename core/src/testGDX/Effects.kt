@@ -1,10 +1,11 @@
 package testGDX
 
 import java.util.Collections
+import java.util.concurrent.CopyOnWriteArrayList
 
 
 data abstract public
-class EffectHandler<TEffect>(val type: Class<TEffect>, val order: Int):
+class EffectHandler<TEffect: Any>(val type: Class<TEffect>, val order: Int):
         Comparable<EffectHandler<TEffect>> {
 
     override public fun compareTo(other: EffectHandler<TEffect>): Int {
@@ -30,7 +31,12 @@ fun addEffectHandler(context: Context, handler: EffectHandler<*>) {
     val handlers = handlersOf(context)
     val typeHandlers = handlers[handler.type]
     if(typeHandlers == null) {
-        handlers[handler.type] = arrayListOf(handler)
+        val newHandlers = CopyOnWriteArrayList<EffectHandler<*>>()
+        newHandlers.add(handler)
+        handlers[handler.type] = newHandlers
+    }
+    else if(typeHandlers.any { a -> a.order == handler.order }) {
+        throw IllegalStateException("Handler of given priority already exists.")
     }
     else {
         typeHandlers.add(handler)
@@ -48,10 +54,10 @@ fun removeEffectHandler(context: Context, handler: EffectHandler<*>) {
 
 fun applyEffect<TEffect: Any>(context: Context, effect: TEffect) {
     val handlers = handlersOf(context)
-    val contextHandlers1 = handlers[effect.javaClass]
-    if(contextHandlers1 == null)
+    val key = effect.javaClass
+    if(key !in handlers)
         return
-    val contextHandlers = contextHandlers1 as MutableList<EffectHandler<TEffect>>
+    val contextHandlers = handlers[key] as MutableList<EffectHandler<TEffect>>
     for(handler in contextHandlers)
         handler(context, effect)
 }

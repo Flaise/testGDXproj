@@ -15,3 +15,5 @@ data class Vec2iv(val x: Int, val y: Int) {
 
     fun dist8(other: Vec2iv) = Math.max(Math.abs(x - other.x), Math.abs(y - other.y))
 }
+
+// TODO: operator lifting

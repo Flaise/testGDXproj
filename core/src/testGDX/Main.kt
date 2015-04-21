@@ -13,9 +13,11 @@ import java.util.TimerTask
 
 public class Main: ApplicationAdapter() {
     val camera = OrthographicCamera()
-    val viewport = ExtendViewport(40f, 40f, 60f, 0f, camera)
+    val viewport = ExtendViewport(40f, 40f, 40f, 0f, camera)
     val context = Context()
     val random = RandomXS128()
+    val tickEffect = TickEffect(random)
+
     var shapes: ShapeRenderer? = null
     var drawEffect: DrawEffect? = null
 
@@ -29,11 +31,11 @@ public class Main: ApplicationAdapter() {
         shapes = ShapeRenderer()
         drawEffect = DrawEffect(shapes!!, viewport)
 
-        for(i in -10..39 + 10) {
+        for(i in 0..39) {
             makeBedrock(context, Vec2iv(i, random.nextInt(4) + 1))
         }
 
-        makeWater(context, Vec2iv(0, 40))
+        makeRain(context, Vec2iv(0, 40), 40)
 
         delayTick()
     }
@@ -43,7 +45,7 @@ public class Main: ApplicationAdapter() {
             override fun run() {
                 delayTick()
                 Gdx.app.postRunnable {
-                    applyEffect(context, TickEffect)
+                    applyEffect(context, tickEffect)
                     Gdx.graphics.requestRendering()
                 }
             }

@@ -35,10 +35,8 @@ public class Main: ApplicationAdapter() {
             makeBedrock(context, Vec2iv(i, random.nextInt(4) + 1))
         }
 
-        makeRain(context, Vec2iv(0, 40), 40)
-
-        makeDirt(context, Vec2iv(10, 40))
-        makeDirt(context, Vec2iv(15, 35))
+        makeRain(context, { a, b -> makeWater(a, b) }, Vec2iv(0, 40), 40)
+        makeRain(context, { a, b -> makeDirt(a, b) }, Vec2iv(0, 40), 40)
 
         delayTick()
     }

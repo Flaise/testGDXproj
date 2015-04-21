@@ -9,7 +9,7 @@ object TickRainHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 2) {
             for(x in 0..emitter.width - 1) {
                 if(effect.random.nextFloat() > emitter.chanceOfGeneration)
                     continue
-                makeWater(context, Vec2iv(emitter.left + x, emitter.y))
+                emitter.make(context, Vec2iv(emitter.left + x, emitter.y))
             }
         }
     }
@@ -17,7 +17,8 @@ object TickRainHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 2) {
 
 object KRain: Key<MutableList<Emitter>> {}
 
-class Emitter(val topLeft: Vec2iv, val width: Int, val chanceOfGeneration: Float) {
+class Emitter(val make: (Context, Vec2iv) -> Unit, val topLeft: Vec2iv, val width: Int,
+              val chanceOfGeneration: Float) {
     val left: Int get() = topLeft.x
     val right: Int get() = left + width
     val y: Int get() = topLeft.y
@@ -32,7 +33,7 @@ fun emittersOf(context: Context): MutableList<Emitter> {
     return result
 }
 
-fun makeRain(context: Context, topLeft: Vec2iv, width: Int) {
+fun makeRain(context: Context, make: (Context, Vec2iv) -> Unit, topLeft: Vec2iv, width: Int) {
     val emitters = emittersOf(context)
-    emitters.add(Emitter(topLeft, width, .05f))
+    emitters.add(Emitter(make, topLeft, width, .03f))
 }

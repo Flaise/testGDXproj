@@ -2,7 +2,22 @@ package testGDX
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import java.util.NoSuchElementException
+import java.util.concurrent.CopyOnWriteArraySet
 
+
+object TickSettledDirtHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 2) {
+    override fun invoke(context: Context, effect: TickEffect) {
+        val positions = settledDirtPositionsOf(context)
+
+        for(position in positions) {
+            if(position + DOWNV !in positions
+                    && !(position + LEFTV in positions || position + RIGHTV in positions)) {
+                positions.remove(position)
+                makeDirt(context, position)
+            }
+        }
+    }
+}
 
 object PushSettledDirtHandler: EffectHandler<PushEffect>(javaClass<PushEffect>(), 1) {
     override fun invoke(context: Context, effect: PushEffect) {
@@ -43,11 +58,12 @@ object KSettledDirt: Key<MutableSet<Vec2iv>> {}
 fun settledDirtPositionsOf(context: Context): MutableSet<Vec2iv> {
     if(KSettledDirt in context)
         return context[KSettledDirt]
-    val result = hashSetOf<Vec2iv>()
+    val result = CopyOnWriteArraySet<Vec2iv>()
     context[KSettledDirt] = result
     addEffectHandler(context, DrawSettledDirtHandler)
     addEffectHandler(context, PushSettledDirtHandler)
     addEffectHandler(context, DirtMovedSettledDirtHandler)
+    addEffectHandler(context, TickSettledDirtHandler)
     return result
 }
 

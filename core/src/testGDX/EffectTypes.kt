@@ -9,9 +9,7 @@ class PushEffect(val destination: Vec2iv) {
     var obstructed = false
 }
 
-class DrawEffect(val shapes: ShapeRenderer, val viewport: Viewport) {
-    // TODO: time since last frame
-}
+class DrawEffect(val shapes: ShapeRenderer, val viewport: Viewport) {}
 
 class TickEffect(val random: Random) {}
 

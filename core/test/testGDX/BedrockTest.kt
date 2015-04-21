@@ -19,7 +19,7 @@ public class BedrockTest {
     Test fun obstruction() {
         makeBedrock(context, Vec2iv(10, 5))
 
-        val effect = PushEffect(Vec2iv(10, 6), Vec2iv(10, 5))
+        val effect = PushEffect(Vec2iv(10, 5))
         assert(!effect.obstructed)
 
         applyEffect(context, effect)
@@ -29,7 +29,7 @@ public class BedrockTest {
     Test fun noObstruction() {
         makeBedrock(context, Vec2iv(10, 5))
 
-        val effect = PushEffect(Vec2iv(10, 7), Vec2iv(10, 6))
+        val effect = PushEffect(Vec2iv(10, 6))
         assert(!effect.obstructed)
 
         applyEffect(context, effect)

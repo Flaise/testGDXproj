@@ -23,15 +23,16 @@ object TickWaterHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 0) {
         var i = 0
         while(i < positions.size()) {
             val position = positions[i]
+            val dest = position + DOWNV
 
-            val push = PushEffect(position, position + DOWNV)
+            val push = PushEffect(dest)
             applyEffect(context, push)
             if(push.obstructed) {
                 positions.remove(i)
                 continue
             }
 
-            positions[i] = position + DOWNV // TODO: arithmetic in place
+            positions[i] = dest // TODO: arithmetic in place
             i += 1
         }
     }

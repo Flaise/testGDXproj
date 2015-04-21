@@ -11,6 +11,14 @@ object PushSettledDirtHandler: EffectHandler<PushEffect>(javaClass<PushEffect>()
     }
 }
 
+object DirtMovedSettledDirtHandler: EffectHandler<DirtMovedEffect>(javaClass<DirtMovedEffect>(), 0) {
+    override fun invoke(context: Context, effect: DirtMovedEffect) {
+        val positions = settledDirtPositionsOf(context)
+        if(effect.position + LEFTV in positions || effect.position + RIGHTV in positions)
+            effect.stuck = true
+    }
+}
+
 object DrawSettledDirtHandler: EffectHandler<DrawEffect>(javaClass<DrawEffect>(), 3) {
     override fun invoke(context: Context, effect: DrawEffect) {
         val shapes = effect.shapes
@@ -33,6 +41,7 @@ fun settledDirtPositionsOf(context: Context): MutableSet<Vec2iv> {
     context[KSettledDirt] = result
     addEffectHandler(context, DrawSettledDirtHandler)
     addEffectHandler(context, PushSettledDirtHandler)
+    addEffectHandler(context, DirtMovedSettledDirtHandler)
     return result
 }
 

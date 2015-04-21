@@ -23,17 +23,26 @@ object TickDirtHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 1) {
         var i = 0
         while(i < positions.size()) {
             val position = positions[i]
+            val dest = position + DOWNV
 
-            val push = PushEffect(position, position + DOWNV)
+            val push = PushEffect(dest)
             applyEffect(context, push)
             if(push.obstructed) {
                 positions.remove(i)
                 makeSettledDirt(context, position)
+                continue
             }
-            else {
-                positions[i] = position + DOWNV // TODO: arithmetic in place
-                i += 1
+
+            val moved = DirtMovedEffect(dest)
+            applyEffect(context, moved)
+            if(moved.stuck) {
+                positions.remove(i)
+                makeSettledDirt(context, dest)
+                continue
             }
+
+            positions[i] = dest // TODO: arithmetic in place
+            i += 1
         }
     }
 }

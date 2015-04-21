@@ -13,7 +13,7 @@ import java.util.TimerTask
 
 public class Main: ApplicationAdapter() {
     val camera = OrthographicCamera()
-    val viewport = ExtendViewport(40f, 40f, 40f, 0f, camera)
+    val viewport = ExtendViewport(40f, 40f, 40f, 40f, camera)
     val context = Context()
     val random = RandomXS128()
     val tickEffect = TickEffect(random)
@@ -36,8 +36,8 @@ public class Main: ApplicationAdapter() {
             makeBedrock(context, Vec2iv(i, random.nextInt(4) + 1))
         }
 
-        makeRain(context, { a, b -> makeWater(a, b) }, Vec2iv(0, 40), 40)
-        makeRain(context, { a, b -> makeDirt(a, b) }, Vec2iv(0, 40), 40)
+        makeRain(context, { a, b -> makeWater(a, b) }, Vec2iv(0, 41), 40)
+        makeRain(context, { a, b -> makeDirt(a, b) }, Vec2iv(0, 41), 40)
 
         delayTick()
     }

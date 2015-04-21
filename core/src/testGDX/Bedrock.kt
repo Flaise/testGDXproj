@@ -3,7 +3,7 @@ package testGDX
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 
 
-object GentlePushHandler: EffectHandler<PushEffect>(javaClass<PushEffect>(), 0) {
+object PushBedrockHandler: EffectHandler<PushEffect>(javaClass<PushEffect>(), 0) {
     override fun invoke(context: Context, effect: PushEffect) {
         val elevation = bedrockElevation(context, effect.destination.x)
         if(elevation != null && elevation >= effect.destination.y)
@@ -34,7 +34,7 @@ fun elevationsOf(context: Context): MutableMap<Int, Int> {
         return context[KBedrock]
     val result = hashMapOf<Int, Int>()
     context[KBedrock] = result
-    addEffectHandler(context, GentlePushHandler)
+    addEffectHandler(context, PushBedrockHandler)
     addEffectHandler(context, DrawBedrockHandler)
     return result
 }

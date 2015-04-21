@@ -27,12 +27,13 @@ object TickDirtHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 1) {
             val push = PushEffect(position, position + DOWNV)
             applyEffect(context, push)
             if(push.obstructed) {
-                i += 1
-                continue
+                positions.remove(i)
+                makeSettledDirt(context, position)
             }
-
-            positions[i] = position + DOWNV // TODO: arithmetic in place
-            i += 1
+            else {
+                positions[i] = position + DOWNV // TODO: arithmetic in place
+                i += 1
+            }
         }
     }
 }

@@ -33,6 +33,12 @@ class MockHandlerAddsFirst(val expectedInput: Int):
     }
 }
 
+class MockHandlerAlsoFirst(): EffectHandler<MockEffect>(javaClass<MockEffect>(), 1) {
+    override public fun invoke(context: Context, effect: MockEffect) {
+        fail()
+    }
+}
+
 
 public class EffectsTest {
     var context = Context()
@@ -72,9 +78,25 @@ public class EffectsTest {
         assertEquals(effect.value, 0)
     }
 
-    Test(expected = javaClass<IllegalStateException>()) fun addTwice() {
+    Test fun addTwice() {
+        val handler = MockHandlerFirst(0)
+        addEffectHandler(context, handler)
+        try {
+            addEffectHandler(context, handler)
+        }
+        catch(err: IllegalStateException) {
+            assertEquals(err.getMessage(), "Handler already added.")
+        }
+    }
+
+    Test fun priorityCollision() {
         addEffectHandler(context, MockHandlerFirst(0))
-        addEffectHandler(context, MockHandlerFirst(0))
+        try {
+            addEffectHandler(context, MockHandlerAlsoFirst())
+        }
+        catch(err: IllegalStateException) {
+            assertEquals(err.getMessage(), "Handler of given class and priority already added.")
+        }
     }
 
     Test fun concurrentModification() {

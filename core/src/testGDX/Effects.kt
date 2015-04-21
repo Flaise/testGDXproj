@@ -4,13 +4,13 @@ import java.util.Collections
 import java.util.concurrent.CopyOnWriteArrayList
 
 
-data abstract public
-class EffectHandler<TEffect: Any>(val type: Class<TEffect>, val order: Int):
+abstract public class EffectHandler<TEffect: Any>(val type: Class<TEffect>, val order: Int):
         Comparable<EffectHandler<TEffect>> {
 
-    override public fun compareTo(other: EffectHandler<TEffect>): Int {
-        return order - other.order
-    }
+    override public fun toString() =
+        javaClass.getSimpleName() + "(type=" + type.getSimpleName() + " order=" + order + ")"
+
+    override public fun compareTo(other: EffectHandler<TEffect>) = order - other.order
 
     abstract fun invoke(context: Context, effect: TEffect)
 }
@@ -36,7 +36,10 @@ fun addEffectHandler(context: Context, handler: EffectHandler<*>) {
         handlers[handler.type] = newHandlers
     }
     else if(typeHandlers.any { a -> a.order == handler.order }) {
-        throw IllegalStateException("Handler of given priority already exists.")
+        if(handler in typeHandlers)
+            throw IllegalStateException("Handler already added.")
+        // TODO: say which handler is already added
+        throw IllegalStateException("Handler of given class and priority already added.")
     }
     else {
         typeHandlers.add(handler)

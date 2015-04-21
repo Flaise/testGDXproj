@@ -1,7 +1,7 @@
 package testGDX
 
 
-object TickRainHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 1) {
+object TickRainHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 2) {
     override fun invoke(context: Context, effect: TickEffect) {
         val emitters = emittersOf(context)
 

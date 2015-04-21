@@ -3,7 +3,7 @@ package testGDX
 import java.util.NoSuchElementException
 
 
-trait Key<TValue> {}
+data trait Key<TValue> {}
 
 class Context() {
     val contents = hashMapOf<Key<*>, Any>()

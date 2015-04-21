@@ -3,22 +3,22 @@ package testGDX
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 
 
-object DrawWaterHandler: EffectHandler<DrawEffect>(javaClass<DrawEffect>(), 1) {
+object DrawDirtHandler: EffectHandler<DrawEffect>(javaClass<DrawEffect>(), 2) {
     override fun invoke(context: Context, effect: DrawEffect) {
         val shapes = effect.shapes
 
         shapes.begin(ShapeRenderer.ShapeType.Filled)
-        shapes.setColor(0f, .3f, .8f, 1f)
-        for((x, y) in waterPositionsOf(context)) {
+        shapes.setColor(.7f, .5f, .1f, 1f)
+        for((x, y) in dirtPositionsOf(context)) {
             shapes.rect(x.toFloat(), y.toFloat(), 1f, 1f)
         }
         shapes.end()
     }
 }
 
-object TickWaterHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 0) {
+object TickDirtHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 1) {
     override fun invoke(context: Context, effect: TickEffect) {
-        val positions = waterPositionsOf(context)
+        val positions = dirtPositionsOf(context)
 
         var i = 0
         while(i < positions.size()) {
@@ -27,7 +27,7 @@ object TickWaterHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 0) {
             val push = PushEffect(position, position + DOWNV)
             applyEffect(context, push)
             if(push.obstructed) {
-                positions.remove(i)
+                i += 1
                 continue
             }
 
@@ -37,19 +37,19 @@ object TickWaterHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 0) {
     }
 }
 
-object KWater: Key<MutableList<Vec2iv>> {}
+object KDirt: Key<MutableList<Vec2iv>> {}
 
-fun waterPositionsOf(context: Context): MutableList<Vec2iv> {
-    if(KWater in context)
-        return context[KWater]
+fun dirtPositionsOf(context: Context): MutableList<Vec2iv> {
+    if(KDirt in context)
+        return context[KDirt]
     val result = arrayListOf<Vec2iv>()
-    context[KWater] = result
-    addEffectHandler(context, DrawWaterHandler)
-    addEffectHandler(context, TickWaterHandler)
+    context[KDirt] = result
+    addEffectHandler(context, DrawDirtHandler)
+    addEffectHandler(context, TickDirtHandler)
     return result
 }
 
-fun makeWater(context: Context, position: Vec2iv) {
-    val positions = waterPositionsOf(context)
+fun makeDirt(context: Context, position: Vec2iv) {
+    val positions = dirtPositionsOf(context)
     positions.add(position)
 }

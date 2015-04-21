@@ -21,19 +21,19 @@ public class WaterTest {
     Test fun obstruction() {
         makeBedrock(context, Vec2iv(10, 5))
         makeWater(context, Vec2iv(10, 6))
-        assertEquals(positionsOf(context).size(), 1)
+        assertEquals(waterPositionsOf(context).size(), 1)
 
         applyEffect(context, tickEffect)
-        assertEquals(positionsOf(context).size(), 0)
+        assertEquals(waterPositionsOf(context).size(), 0)
     }
 
     Test fun noObstruction() {
         makeBedrock(context, Vec2iv(10, 5))
         makeWater(context, Vec2iv(10, 7))
-        assertEquals(positionsOf(context).size(), 1)
+        assertEquals(waterPositionsOf(context).size(), 1)
 
         applyEffect(context, tickEffect)
-        assertEquals(positionsOf(context).size(), 1)
+        assertEquals(waterPositionsOf(context).size(), 1)
     }
 
 }

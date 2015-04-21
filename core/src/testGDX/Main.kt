@@ -37,6 +37,9 @@ public class Main: ApplicationAdapter() {
 
         makeRain(context, Vec2iv(0, 40), 40)
 
+        makeDirt(context, Vec2iv(10, 40))
+        makeDirt(context, Vec2iv(15, 35))
+
         delayTick()
     }
 

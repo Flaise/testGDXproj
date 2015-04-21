@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.viewport.Viewport
 import java.util.Random
 
 
-class GentlePushEffect(val origin: Vec2iv, val destination: Vec2iv) {
+class PushEffect(val origin: Vec2iv, val destination: Vec2iv) {
     var obstructed = false
 }
 

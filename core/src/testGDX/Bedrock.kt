@@ -3,8 +3,8 @@ package testGDX
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 
 
-object GentlePushHandler: EffectHandler<GentlePushEffect>(javaClass<GentlePushEffect>(), 0) {
-    override fun invoke(context: Context, effect: GentlePushEffect) {
+object GentlePushHandler: EffectHandler<PushEffect>(javaClass<PushEffect>(), 0) {
+    override fun invoke(context: Context, effect: PushEffect) {
         val elevation = bedrockElevation(context, effect.destination.x)
         if(elevation != null && elevation >= effect.destination.y)
             effect.obstructed = true

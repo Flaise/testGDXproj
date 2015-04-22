@@ -43,8 +43,7 @@ fun addEffectHandler(context: Context, handler: EffectHandler<*>) {
                                     + existing.javaClass.getSimpleName())
     }
     else {
-        typeHandlers.add(handler)
-        Collections.sort(typeHandlers)
+        typeHandlers.addInOrder(handler)
     }
 }
 
@@ -66,4 +65,10 @@ fun applyEffect<TEffect: Any>(context: Context, effect: TEffect) {
         handler(context, effect)
 }
 
-
+fun MutableList<T>.addInOrder<T: Comparable<T>>(element: T) {
+    val index = Collections.binarySearch(this, element)
+    val insertAt =
+        if(index < 0) -(index + 1)
+        else index + 1
+    this.add(insertAt, element)
+}

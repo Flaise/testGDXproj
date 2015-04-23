@@ -16,7 +16,7 @@ abstract public class EffectHandler<TEffect: Any>(val type: Class<TEffect>, val 
 }
 
 
-object KEffects: Key<MutableMap<Class<*>, MutableList<EffectHandler<*>>>> {}
+object KEffects: Key<MutableMap<Class<*>, MutableList<EffectHandler<*>>>>
 
 
 fun handlersOf(context: Context): MutableMap<Class<*>, MutableList<EffectHandler<*>>> {

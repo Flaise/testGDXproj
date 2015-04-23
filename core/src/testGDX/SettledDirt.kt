@@ -57,7 +57,7 @@ object DrawSettledDirtHandler: EffectHandler<DrawEffect>(javaClass<DrawEffect>()
     }
 }
 
-object KSettledDirt: Key<MutableSet<Vec2iv>> {}
+object KSettledDirt: Key<MutableSet<Vec2iv>>
 
 fun settledDirtPositionsOf(context: Context): MutableSet<Vec2iv> {
     if(KSettledDirt in context)

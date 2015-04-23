@@ -47,7 +47,7 @@ object TickDirtHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 1) {
     }
 }
 
-object KDirt: Key<MutableList<Vec2iv>> {}
+object KDirt: Key<MutableList<Vec2iv>>
 
 fun dirtPositionsOf(context: Context): MutableList<Vec2iv> {
     if(KDirt in context)

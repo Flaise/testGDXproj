@@ -15,7 +15,7 @@ object TickRainHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 3) {
     }
 }
 
-object KRain: Key<MutableList<Emitter>> {}
+object KRain: Key<MutableList<Emitter>>
 
 class Emitter(val make: (Context, Vec2iv) -> Unit, val topLeft: Vec2iv, val width: Int,
               val chanceOfGeneration: Float) {

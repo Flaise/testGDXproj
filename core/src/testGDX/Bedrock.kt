@@ -26,7 +26,7 @@ object DrawBedrockHandler: EffectHandler<DrawEffect>(javaClass<DrawEffect>(), 0)
     }
 }
 
-object KBedrock: Key<MutableMap<Int, Int>> {}
+object KBedrock: Key<MutableMap<Int, Int>>
 
 fun elevationsOf(context: Context): MutableMap<Int, Int> {
     if(KBedrock in context)

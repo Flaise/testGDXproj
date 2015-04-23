@@ -34,16 +34,21 @@ fun addEffectHandler(context: Context, handler: EffectHandler<*>) {
         val newHandlers = CopyOnWriteArrayList<EffectHandler<*>>()
         newHandlers.add(handler)
         handlers[handler.type] = newHandlers
+        return
     }
-    else if(typeHandlers.any { it.order == handler.order }) {
-        if(handler in typeHandlers)
+
+    val index = Collections.binarySearch(typeHandlers, handler)
+    if(index >= 0) {
+        val existing = typeHandlers[index]
+        if(existing == handler)
             throw IllegalStateException("Handler already added.")
-        val existing = typeHandlers.first { it.order == handler.order }
-        throw IllegalStateException("Handler of given class and priority already added: "
-                                    + existing.javaClass.getSimpleName())
+        throw IllegalStateException(
+            "Handler of given class and priority already added: "
+            + existing.javaClass.getSimpleName()
+        )
     }
     else {
-        typeHandlers.addInOrder(handler)
+        typeHandlers.add(-(index + 1), handler)
     }
 }
 
@@ -63,12 +68,4 @@ fun applyEffect<TEffect: Any>(context: Context, effect: TEffect) {
     val contextHandlers = handlers[key] as MutableList<EffectHandler<TEffect>>
     for(handler in contextHandlers)
         handler(context, effect)
-}
-
-fun MutableList<T>.addInOrder<T: Comparable<T>>(element: T) {
-    val index = Collections.binarySearch(this, element)
-    val insertAt =
-        if(index < 0) -(index + 1)
-        else index + 1
-    this.add(insertAt, element)
 }

@@ -17,7 +17,7 @@ public class Main: ApplicationAdapter() {
     val context = Context()
     val random = RandomXS128()
     val tickEffect = TickEffect(random)
-    val timer = Timer()
+    val timer = Timer(true)
 
     var shapes: ShapeRenderer? = null
     var drawEffect: DrawEffect? = null

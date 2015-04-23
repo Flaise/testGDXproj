@@ -10,11 +10,15 @@ object TickSettledDirtHandler: EffectHandler<TickEffect>(javaClass<TickEffect>()
         val positions = settledDirtPositionsOf(context)
 
         for(position in positions) {
-            if(position + DOWNV !in positions
-                    && !(position + LEFTV in positions || position + RIGHTV in positions)) {
-                positions.remove(position)
-                makeDirt(context, position)
-            }
+            val below = position + DOWNV
+            if(isBedrockAt(context, below))
+                continue
+            if(below in positions)
+                continue
+            if(position + LEFTV in positions || position + RIGHTV in positions)
+                continue
+            positions.remove(position)
+            makeDirt(context, position)
         }
     }
 }
@@ -75,7 +79,7 @@ fun makeSettledDirt(context: Context, position: Vec2iv) {
 fun unsettle(context: Context, position: Vec2iv) {
     val positions = settledDirtPositionsOf(context)
     if(position !in positions)
-        throw NoSuchElementException()
+        throw NoSuchElementException() // TODO: sanity testing
     positions.remove(position)
     makeDirt(context, position)
 }

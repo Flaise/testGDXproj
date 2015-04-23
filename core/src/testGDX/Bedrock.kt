@@ -5,8 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 
 object PushBedrockHandler: EffectHandler<PushEffect>(javaClass<PushEffect>(), 0) {
     override fun invoke(context: Context, effect: PushEffect) {
-        val elevation = bedrockElevation(context, effect.destination.x)
-        if(elevation != null && elevation >= effect.destination.y)
+        if(isBedrockAt(context, effect.destination))
             effect.obstructed = true
     }
 }
@@ -49,3 +48,8 @@ fun makeBedrock(context: Context, position: Vec2iv) {
 
 // Adds key type-checking to Map#get()
 fun bedrockElevation(context: Context, x: Int): Int? = elevationsOf(context)[x]
+
+fun isBedrockAt(context: Context, position: Vec2iv): Boolean {
+    val elevation = bedrockElevation(context, position.x)
+    return elevation != null && elevation >= position.y
+}

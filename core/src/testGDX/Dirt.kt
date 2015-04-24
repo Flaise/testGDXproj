@@ -50,13 +50,14 @@ object TickDirtHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 1) {
 object KDirt: Key<MutableList<Vec2iv>>
 
 fun dirtPositionsOf(context: Context): MutableList<Vec2iv> {
-    if(KDirt in context)
-        return context[KDirt]
-    val result = arrayListOf<Vec2iv>()
-    context[KDirt] = result
+    val result = context[KDirt]
+    if(result != null)
+        return result
+    val result2 = arrayListOf<Vec2iv>()
+    context[KDirt] = result2
     addEffectHandler(context, DrawDirtHandler)
     addEffectHandler(context, TickDirtHandler)
-    return result
+    return result2
 }
 
 fun makeDirt(context: Context, position: Vec2iv) {

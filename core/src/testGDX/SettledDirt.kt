@@ -60,15 +60,16 @@ object DrawSettledDirtHandler: EffectHandler<DrawEffect>(javaClass<DrawEffect>()
 object KSettledDirt: Key<MutableSet<Vec2iv>>
 
 fun settledDirtPositionsOf(context: Context): MutableSet<Vec2iv> {
-    if(KSettledDirt in context)
-        return context[KSettledDirt]
-    val result = CopyOnWriteArraySet<Vec2iv>()
-    context[KSettledDirt] = result
+    val result = context[KSettledDirt]
+    if(result != null)
+        return result
+    val result2 = CopyOnWriteArraySet<Vec2iv>()
+    context[KSettledDirt] = result2
     addEffectHandler(context, DrawSettledDirtHandler)
     addEffectHandler(context, PushSettledDirtHandler)
     addEffectHandler(context, DirtMovedSettledDirtHandler)
     addEffectHandler(context, TickSettledDirtHandler)
-    return result
+    return result2
 }
 
 fun makeSettledDirt(context: Context, position: Vec2iv) {

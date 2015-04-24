@@ -9,7 +9,6 @@ import java.util.NoSuchElementException
 
 object Left: Key<Int> {}
 object Right: Key<Float> {}
-object NullableThing: Key<Any?> {}
 
 public class ContextTest {
     var context = Context()
@@ -44,31 +43,13 @@ public class ContextTest {
         assertEquals(context[Left], 4)
     }
 
-    Test fun storeNull() {
-        context[NullableThing] = null
-        assertEquals(context[NullableThing], null)
-    }
-
-    Test fun overwriteNull() {
-        context[NullableThing] = null
-        val one = Any()
-        context[NullableThing] = one
-        assertEquals(context[NullableThing], one)
-    }
-
-    Test(expected = javaClass<NoSuchElementException>()) fun missingInt() {
-        context[Left]
+    Test fun missingInt() {
+        assertEquals(null, context[Left])
     }
 
     Test fun existenceOfInt() {
         assert(Left !in context)
         context[Left] = 1
         assert(Left in context)
-    }
-
-    Test fun existenceOfNullable() {
-        assert(NullableThing !in context)
-        context[NullableThing] = null
-        assert(NullableThing in context)
     }
 }

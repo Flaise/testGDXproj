@@ -41,13 +41,14 @@ object TickWaterHandler: EffectHandler<TickEffect>(javaClass<TickEffect>(), 0) {
 object KWater: Key<MutableList<Vec2iv>> {}
 
 fun waterPositionsOf(context: Context): MutableList<Vec2iv> {
-    if(KWater in context)
-        return context[KWater]
-    val result = arrayListOf<Vec2iv>()
-    context[KWater] = result
+    val result = context[KWater]
+    if(result != null)
+        return result
+    val result2 = arrayListOf<Vec2iv>()
+    context[KWater] = result2
     addEffectHandler(context, DrawWaterHandler)
     addEffectHandler(context, TickWaterHandler)
-    return result
+    return result2
 }
 
 fun makeWater(context: Context, position: Vec2iv) {

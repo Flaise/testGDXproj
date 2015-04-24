@@ -20,11 +20,12 @@ object KEffects: Key<MutableMap<Class<*>, MutableList<EffectHandler<*>>>>
 
 
 fun handlersOf(context: Context): MutableMap<Class<*>, MutableList<EffectHandler<*>>> {
-    if(KEffects in context)
-        return context[KEffects]
-    val result = hashMapOf<Class<*>, MutableList<EffectHandler<*>>>()
-    context[KEffects] = result
-    return result
+    val result = context[KEffects]
+    if(result != null)
+        return result
+    val result2 = hashMapOf<Class<*>, MutableList<EffectHandler<*>>>()
+    context[KEffects] = result2
+    return result2
 }
 
 fun addEffectHandler(context: Context, handler: EffectHandler<*>) {

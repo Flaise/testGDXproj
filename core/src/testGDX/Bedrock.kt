@@ -29,13 +29,14 @@ object DrawBedrockHandler: EffectHandler<DrawEffect>(javaClass<DrawEffect>(), 0)
 object KBedrock: Key<MutableMap<Int, Int>>
 
 fun elevationsOf(context: Context): MutableMap<Int, Int> {
-    if(KBedrock in context)
-        return context[KBedrock]
-    val result = hashMapOf<Int, Int>()
-    context[KBedrock] = result
+    val result = context[KBedrock]
+    if(result != null)
+        return result
+    val result2 = hashMapOf<Int, Int>()
+    context[KBedrock] = result2
     addEffectHandler(context, PushBedrockHandler)
     addEffectHandler(context, DrawBedrockHandler)
-    return result
+    return result2
 }
 
 fun makeBedrock(context: Context, position: Vec2iv) {

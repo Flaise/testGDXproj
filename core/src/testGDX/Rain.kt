@@ -25,12 +25,13 @@ class Emitter(val make: (Context, Vec2iv) -> Unit, val topLeft: Vec2iv, val widt
 }
 
 fun emittersOf(context: Context): MutableList<Emitter> {
-    if(KRain in context)
-        return context[KRain]
-    val result = arrayListOf<Emitter>()
-    context[KRain] = result
+    val result = context[KRain]
+    if(result != null)
+        return result
+    val result2 = arrayListOf<Emitter>()
+    context[KRain] = result2
     addEffectHandler(context, TickRainHandler)
-    return result
+    return result2
 }
 
 fun makeRain(context: Context, make: (Context, Vec2iv) -> Unit, topLeft: Vec2iv, width: Int) {
